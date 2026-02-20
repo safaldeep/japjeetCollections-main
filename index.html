@@ -182,7 +182,7 @@
                 const isOut = item.stock === "Out of Stock";
                 
                 // Create WhatsApp Message
-                var itemDetails = "Hi! I'm interested in the " + item.title + " (inr" + item.price + "). Is it available?";
+                var itemDetails = "Hi! I'm interested in the " + item.title + " (₹ " + item.price + "). Is it available?";
                 // var sizePrompt = "%0A%0ASize I want: %0AColor: ";
                 var imageLink = "%0AView Image: " + item.image;
                 var fullMessage = encodeURIComponent(itemDetails);
