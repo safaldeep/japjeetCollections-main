@@ -5,7 +5,7 @@ const inventory = [
         id: 1,
         title: "Oversized Linen Blazer",
         price: 120.00,
-        image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=600&q=80",
+        image: "Images/WhatsApp Image 2026-02-19 at 9.20.20 PM (1).jpeg",
         sizes: "S, M, L",
         stock: "In Stock",
         link: "https://yourwebsite.com/product/1"
