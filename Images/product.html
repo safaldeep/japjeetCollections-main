@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | Japjeet Collections</title>
+    
+    <!-- Load inventory data -->
+    <script src="inventory.js"></script>
+
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --bg: #ffffff;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        /* Back Button */
+        .back-link {
+            display: inline-block;
+            padding: 20px;
+            color: #555;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .back-link:hover { text-decoration: underline; }
+
+        /* Product Container */
+        .product-detail {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        /* Image Section */
+        .detail-image {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .detail-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Info Section */
+        .detail-info {
+            flex: 1;
+            min-width: 300px;
+            padding-top: 20px;
+        }
+
+        .detail-title {
+            font-size: 2rem;
+            font-weight: 300;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .detail-price {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .detail-desc {
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .detail-meta {
+            background: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .meta-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .whatsapp-btn {
+            display: block;
+            width: 100%;
+            background-color: #25D366;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            text-decoration: none;
+            font-weight: 600: 4px;
+            font-size: 1;
+            border-radius.1rem;
+            transition: background 0.3s;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+        }
+
+        .not-found {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            color: #666;
+        }
+   head>
+<body>
+
+ </style>
+</    <a href="index.html" class="back-link">← Back to Catalog</a>
+
+    <div id="product-container">
+        <!-- Product details will be loaded here -->
+    </div>
+
+    <script>
+        // Configuration
+        const shopPhoneNumber = "14192799902";
+
+        // Get ID from URL (e.g., product.html?id=1)
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = parseInt(urlParams.get('id'));
+
+        // Find the product in inventory
+        const product = inventory.find(item => item.id === productId);
+
+        const container = document.getElementById('product-container');
+
+        if (product) {
+            // Check availability
+            const isOut = product.stock === "Out of Stock";
+            
+            // Create WhatsApp Message
+            var itemDetails = "Hi! I'm interested in the " + product.title + " ($" + product.price + "). Is it available?";
+            var sizePrompt = "%0A%0ASize I want: %0AColor: ";
+            var fullMessage = encodeURIComponent(itemDetails + sizePrompt);
+            var waLink = "https://wa.me/" + shopPhoneNumber + "?text=" + fullMessage;
+
+            // Build the HTML
+            var html = `
+                <div class="product-detail">
+                    <div class="detail-image">
+                        <img src="${product.image}" alt="${product.title}">
+                    </div>
+                    
+                    <div class="detail-info">
+                        <h1 class="detail-title">${product.title}</h1>
+                        <div class="detail-price">$${product.price.toFixed(2)}</div>
+                        
+                        <p class="detail-desc">
+                            ${product.description || "No description available for this item."}
+                        </p>
+
+                        <div class="detail-meta">
+                            <div class="meta-row">
+                                <span class="meta-label">Availability</span>
+                                <span>${product.stock}</span>
+                            </div>
+                            <div class="meta-row">
+                                <span class="meta-label">Sizes Available</span>
+                                <span>${product.sizes}</span>
+                            </div>
+                            ${product.material ? `
+                            <div class="meta-row">
+                                <span class="meta-label">Material</span>
+                                <span>${product.material}</span>
+                            </div>
+                            ` : ''}
+                            ${product.color ? `
+                            <div class="meta-row">
+                                <span class="meta-label">Color</span>
+                                <span>${product.color}</span>
+                            </div>
+                            ` : ''}
+                        </div>
+
+                        ${!isOut ? 
+                        `<a href="${waLink}" target="_blank" class="whatsapp-btn">
+                            Order via WhatsApp
+                        </a>` : 
+                        `<button class="whatsapp-btn" style="background-color:#ccc; cursor:not-allowed;" disabled>
+                            Out of Stock
+                        </button>`}
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        } else {
+            container.innerHTML = '<div class="not-found">Product not found. <a href="index.html">Go back to catalog</a></div>';
+        }
+    </script>
+
+</body>
+</html>
