@@ -156,9 +156,9 @@
             const isOut = product.stock === "Out of Stock";
             
             // Create WhatsApp Message
-            var itemDetails = "Hi! I'm interested in the " + product.title + " ($" + product.price + "). Is it available?";
-            var sizePrompt = "%0A%0ASize I want: %0AColor: ";
-            var fullMessage = encodeURIComponent(itemDetails + sizePrompt);
+            var itemDetails = "Hi! I'm interested in the " + product.title + " (₹" + product.price + "). Is it available?";
+            //var sizePrompt = "%0A%0ASize I want: %0AColor: ";
+            var fullMessage = encodeURIComponent(itemDetails );
             var waLink = "https://wa.me/" + shopPhoneNumber + "?text=" + fullMessage;
             
             // // Create WhatsApp Message
