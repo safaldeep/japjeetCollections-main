@@ -3,14 +3,14 @@
 const inventory = [
     {
         id: 1,
-        title: "Oversized Linen Blazer",
-        price: 120.00,
-        image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=600&q=80",
-        sizes: "S, M, L",
+        title: "Pink Unstitched Cotton Print Suit",
+        price: 2000.00,
+        image: "Images/WhatsApp Image 2026-02-19 at 9.20.20 PM (1).jpeg",
+        sizes: "Unstitched",
         stock: "In Stock",
-        material: "100% Linen",
-        color: "Beige",
-        description: "A breathable oversized blazer perfect for summer events. Features a single-button closure and patch pockets.",
+        material: "100% Cotton",
+        color: "Pink",
+        description: "Unstitched printed cotton suit.Cool in the spring and summer season.",
         link: "https://yourwebsite.com/product/1"
     },
     {
