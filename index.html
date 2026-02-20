@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXE THREADS | Fashion Catalog</title>
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary: #1a1a1a;
+            --accent: #d4af37; /* Gold accent */
+            --bg: #ffffff;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        h1 {
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        p.subtitle {
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Grid Layout */
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Product Card */
+        .product-card {
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 400px; /* Fixed height for uniformity */
+            overflow: hidden;
+            background-color: #f4f4f4;
+            cursor: pointer;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .image-container:hover img {
+            transform: scale(1.05);
+        }
+
+        .badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--primary);
+            color: white;
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badge.low-stock { background: #d32f2f; }
+
+        /* Product Details */
+        .details {
+            padding-top: 15px;
+        }
+
+        .item-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0 0 5px 0;
+        }
+
+        .item-price {
+            color: #555;
+            font-weight: 300;
+        }
+
+        .item-availability {
+            font-size: 0.8rem;
+            color: #27ae60;
+            margin-top: 5px;
+        }
+        
+        .item-availability.out { color: #e74c3c; }
+
+        /* Action Button */
+        .whatsapp-btn {
+            display: block;
+            width: 100%;
+            background-color: #25D366; /* WhatsApp Green */
+            color: white;
+            text-align: center;
+            padding: 12px 0;
+            margin-top: 15px;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            .catalog-grid { padding: 15px; gap: 20px; }
+            .image-container { height: 350px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Japjeet Collections</h1>
+        <p class="subtitle">New Season Arrivals • DM to Order</p>
+        <p style="font-size: 0.8rem; color:#999;">Tap an item to contact us</p>
+    </header>
+
+    <!-- The Grid where items will appear -->
+    <div class="catalog-grid" id="shop-grid">
+        <!-- Items will be injected here by JavaScript -->
+    </div>
+
+        <!-- Load inventory data first -->
+    <script src="inventory.js"></script>
+    
+    <!-- Load main logic -->
+    <script>
+        // Configuration - Replace with your actual number
+        const shopPhoneNumber = "14192799902"; 
+
+        /* --- LOGIC TO RENDER --- */
+        
+        const grid = document.getElementById('shop-grid');
+
+        function renderCatalog() {
+            grid.innerHTML = ''; // Clear existing
+
+            inventory.forEach(function(item) {
+                // Determine availability styling
+                const stockClass = item.stock === "Out of Stock" ? "out" : "";
+                const isOut = item.stock === "Out of Stock";
+                
+                // Create WhatsApp Message
+                var itemDetails = "Hi! I'm interested in the " + item.title + " ($" + item.price + "). Is it available?";
+                var sizePrompt = "%0A%0ASize I want: %0AColor: ";
+                var fullMessage = encodeURIComponent(itemDetails + sizePrompt);
+                var waLink = "https://wa.me/" + shopPhoneNumber + "?text=" + fullMessage;
+
+                // Build HTML Card
+                var card = document.createElement('div');
+                card.className = 'product-card';
+                
+                var badgeHtml = '';
+                if (item.stock === "Low Stock") {
+                    badgeHtml = '<span class="badge low-stock">Selling Fast</span>';
+                }
+
+                var btnHtml = '';
+                if (!isOut) {
+                    btnHtml = '<a href="' + waLink + '" target="_blank" class="whatsapp-btn">Ask about this item</a>';
+                } else {
+                    btnHtml = '<button class="whatsapp-btn" style="background-color:#ccc; cursor:not-allowed;" disabled>Unavailable</button>';
+                }
+
+                card.innerHTML = 
+                    '<div class="image-container">' +
+                        '<img src="' + item.image + '" alt="' + item.title + '">' +
+                        badgeHtml +
+                    '</div>' +
+                    '<div class="details">' +
+                        '<h3 class="item-title">' + item.title + '</h3>' +
+                        '<div class="item-price">$' + item.price.toFixed(2) + '</div>' +
+                        '<div class="item-availability ' + stockClass + '">' +
+                            (isOut ? '❌ Out of Stock' : '✅ ' + item.stock) + ' • Sizes: ' + item.sizes +
+                        '</div>' +
+                        btnHtml +
+                    '</div>';
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Run on load
+        renderCatalog();
+
+    </script>
+</body>
+<!-- </html>
+        // Configuration - Replace with your actual number
+        const shopPhoneNumber = "14192799902"; 
+
+        /* --- LOGIC TO RENDER --- */
+        
+        const grid = document.getElementById('shop-grid');
+
+        function renderCatalog() {
+            grid.innerHTML = ''; // Clear existing
+
+            inventory.forEach(function(item) {
+                // Determine availability styling
+                const stockClass = item.stock === "Out of Stock" ? "out" : "";
+                const isOut = item.stock === "Out of Stock";
+                
+                // Create WhatsApp Message - Using simple string concatenation
+                var itemDetails = "Hi! I'm interested in the " + item.title + " ($" + item.price + "). Is it available?";
+                var sizePrompt = "%0A%0ASize I want: %0AColor: ";
+                var fullMessage = encodeURIComponent(itemDetails + sizePrompt);
+                var waLink = "https://wa.me/" + shopPhoneNumber + "?text=" + fullMessage;
+
+                // Build HTML Card
+                var card = document.createElement('div');
+                card.className = 'product-card';
+                
+                var badgeHtml = '';
+                if (item.stock === "Low Stock") {
+                    badgeHtml = '<span class="badge low-stock">Selling Fast</span>';
+                }
+
+                var btnHtml = '';
+                if (!isOut) {
+                    btnHtml = '<a href="' + waLink + '" target="_blank" class="whatsapp-btn">Ask about this item</a>';
+                } else {
+                    btnHtml = '<button class="whatsapp-btn" style="background-color:#ccc; cursor:not-allowed;" disabled>Unavailable</button>';
+                }
+
+                card.innerHTML = 
+                    '<div class="image-container">' +
+                        '<img src="' + item.image + '" alt="' + item.title + '">' +
+                        badgeHtml +
+                    '</div>' +
+                    '<div class="details">' +
+                        '<h3 class="item-title">' + item.title + '</h3>' +
+                        '<div class="item-price">$' + item.price.toFixed(2) + '</div>' +
+                        '<div class="item-availability ' + stockClass + '">' +
+                            (isOut ? '❌ Out of Stock' : '✅ ' + item.stock) + ' • Sizes: ' + item.sizes +
+                        '</div>' +
+                        btnHtml +
+                    '</div>';
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Run on load
+        renderCatalog();
+
+    </script>
+</body>
+</html> -->
